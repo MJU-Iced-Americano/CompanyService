@@ -18,4 +18,9 @@ public class CompanyController {
         return companyService.enrollment(companyEnrollmentDto);
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
+
 }
