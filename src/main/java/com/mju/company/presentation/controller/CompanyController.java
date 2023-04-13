@@ -2,6 +2,7 @@ package com.mju.company.presentation.controller;
 
 import com.mju.company.appliocation.CompanyService;
 import com.mju.company.domain.model.other.Result.CommonResult;
+import com.mju.company.domain.service.ResponseService;
 import com.mju.company.presentation.dto.CompanyEnrollmentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final ResponseService responseService;
 
     @PostMapping("/enrollment")
     public CommonResult enrollment(@RequestBody CompanyEnrollmentDto companyEnrollmentDto) {
-        return companyService.enrollment(companyEnrollmentDto);
+        companyService.enrollment(companyEnrollmentDto);
+        return responseService.getSuccessfulResult();
     }
 
     @GetMapping("/ping")

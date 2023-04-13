@@ -14,12 +14,10 @@ import org.springframework.stereotype.Service;
 public class CompanyServiceImpl implements CompanyService{
 
     private final CompanyRepository companyRepository;
-    private final ResponseService responseService;
 
     @Transactional
-    public CommonResult enrollment(CompanyEnrollmentDto companyEnrollmentDto) {
+    public void enrollment(CompanyEnrollmentDto companyEnrollmentDto) {
         Company company = new Company(companyEnrollmentDto.getName(), companyEnrollmentDto.getUrl());
         companyRepository.save(company);
-        return responseService.getSuccessfulResult();
     }
 }
