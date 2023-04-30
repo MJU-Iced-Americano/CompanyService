@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: 0
 
 spring:
   application:
     name: company-service
   datasource:
-    url: jdbc:mysql://example-1.cxbtixwquuos.ap-northeast-2.rds.amazonaws.com:3306/test
+    url: jdbc:mysql://backend1.cdtkhh7bqkna.ap-northeast-2.rds.amazonaws.com:3306/backend1
     username: admin
-    password: q1w2e3r4
+    password: iceamericano
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
