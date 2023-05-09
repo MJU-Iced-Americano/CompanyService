@@ -17,19 +17,23 @@ public class Company{
     private String CoCompany_name;
     @Column(name = "co_company_url")
     private String CoCompany_url;
+    @Column(name = "co_company_photo_url")
+    private String CoCompany_photo_url;
 
     @Builder
-    public Company(String CoCompany_name, String CoCompany_url) {
+    public Company(String CoCompany_name, String CoCompany_url, String CoCompany_photo_url) {
         this.CoCompany_name = CoCompany_name;
         this.CoCompany_url = CoCompany_url;
+        this.CoCompany_photo_url = CoCompany_photo_url;
     }
 
     public Company() {
 
     }
 
-    public void CompanyUpdate(String CoCompany_name, String CoCompany_url){
+    public void CompanyUpdate(String CoCompany_name, String CoCompany_url, String CoCompany_photo_url){
         this.CoCompany_name = CoCompany_name;
         this.CoCompany_url = CoCompany_url;
+        this.CoCompany_photo_url = CoCompany_photo_url;
     }
 }

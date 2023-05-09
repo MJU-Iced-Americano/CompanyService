@@ -2,11 +2,9 @@ package com.mju.company.appliocation;
 
 import com.mju.company.domain.model.Review;
 import com.mju.company.domain.model.ReviewComplaint;
-import com.mju.company.domain.model.other.status.ReviewStatus;
-import com.mju.company.domain.repository.ComplaintRepository;
+import com.mju.company.domain.repository.ReviewComplaintRepository;
 import com.mju.company.domain.repository.ReviewRepository;
 import com.mju.company.presentation.dto.ReviewComplaintDto;
-import com.mju.company.presentation.dto.ReviewDto;
 import com.mju.company.presentation.dto.ReviewRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,7 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
-    private final ComplaintRepository complaintRepository;
+    private final ReviewComplaintRepository complaintRepository;
 
     @Override
     @Transactional

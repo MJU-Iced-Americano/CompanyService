@@ -8,4 +8,5 @@ import lombok.Getter;
 public class CompanyDto {
     private String CoCompany_name;
     private String CoCompany_url;
+    private String CoCompany_photo_url;
 }
