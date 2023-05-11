@@ -145,13 +145,6 @@ public class CompanyServiceImpl implements CompanyService {
         return LecturerList;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Lecturer.LecturerGroup> getLecturerGroup() {
-//        List<Lecturer.LecturerGroup> GroupList = lecturerRepository.findAllBy();
-//        return GroupList;
-//    }
-
     @Override
     @Transactional
     public void registerLecturer(LecturerRegisterDto lecturerRegisterDto) {

@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+    @RestController
     @RequiredArgsConstructor
+    @CrossOrigin(origins = "*")
     @RequestMapping("/company-service")
     public class CompanyController {
 
@@ -78,6 +79,7 @@ import java.util.List;
         companyService.deleteNotice(notice_index);
         return responseService.getSuccessfulResult();
     }
+
     // 강사진
     @GetMapping("/lecturer/get")
     public CommonResult getLecturer() {
@@ -85,15 +87,6 @@ import java.util.List;
         CommonResult commonResult = responseService.getListResult(lecturerList);
         return commonResult;
     }
-
-//    @GetMapping("/lecturer/group/get")
-//    public CommonResult getLecturerGroup() {
-//        List<Lecturer> lecturerList = companyService.getLecturer();
-//        CommonResult commonResult = responseService.getListResult(lecturerList);
-//        return commonResult;
-//    }
-
-
     @PostMapping("/lecturer/register")
     public CommonResult registerLecturer(@RequestBody LecturerRegisterDto lecturerRegisterDto){
         companyService.registerLecturer(lecturerRegisterDto);

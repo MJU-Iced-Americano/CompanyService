@@ -30,7 +30,7 @@ public class ExceptionService {
     @ExceptionHandler({CompanyNotFindException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected CommonResult handleCustom(CompanyNotFindException e){
-        log.error("CoCompany not found", e);
+        log.error("Company not found", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
