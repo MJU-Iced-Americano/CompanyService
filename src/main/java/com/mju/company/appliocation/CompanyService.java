@@ -6,6 +6,7 @@ import com.mju.company.domain.model.Notice;
 import com.mju.company.presentation.dto.CompanyDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface CompanyService {
 
         public List<Company> getCompany();
 
-        public void registerCompany(CompanyDto companyDto);
+        public void registerCompany(CompanyDto companyDto, MultipartFile images);
 
-        public void modifyCompany(Long company_index, CompanyDto companyDto);
+        public void modifyCompany(Long company_index, CompanyDto companyDto, MultipartFile images);
 
         public void deleteCompany(Long company_index);
 

@@ -8,12 +8,15 @@ import com.mju.company.domain.model.other.Exception.ExceptionList;
 import com.mju.company.domain.repository.CompanyRepository;
 import com.mju.company.domain.repository.LecturerRepository;
 import com.mju.company.domain.repository.NoticeRepository;
+import com.mju.company.domain.service.S3Service;
 import com.mju.company.presentation.dto.CompanyDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final NoticeRepository noticeRepository;
     private final LecturerRepository lecturerRepository;
+    private final S3Service s3Service;
 
     @Transactional
     @Override
@@ -39,22 +43,37 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public void registerCompany(CompanyDto companyDto) { // 등록
+    public void registerCompany(CompanyDto companyDto, MultipartFile images) { // 등록
+        if (!images.isEmpty()) {
+            String imageUrl = s3Service.uploadImageToS3(images);
+            companyDto.setCoCompany_photo_url(imageUrl);
+        }
         Company company = new Company(companyDto.getCoCompany_name(), companyDto.getCoCompany_url(), companyDto.getCoCompany_photo_url());
-        Company newcompany = Company.builder()
-                .CoCompany_name(company.getCoCompany_name())
-                .CoCompany_url(company.getCoCompany_url())
-                .build();
-        companyRepository.save(newcompany);
+//        Company newcompany = Company.builder()
+//                .CoCompany_name(company.getCoCompany_name())
+//                .CoCompany_url(company.getCoCompany_url())
+//                .CoCompany_photo_url(company.getCoCompany_photo_url())
+//                .build();
+        companyRepository.save(company);
     }
 
     @Transactional
     @Override
-    public void modifyCompany(Long company_index, CompanyDto companyDto) { // 수정
-        Optional<Company> Company = companyRepository.findById(company_index);
-        if (Company.isPresent()) {
-            Company.get().CompanyUpdate(companyDto.getCoCompany_name(), companyDto.getCoCompany_url(), companyDto.getCoCompany_photo_url());
-            companyRepository.save(Company.get());
+    public void modifyCompany(Long company_index, CompanyDto companyDto, MultipartFile images) { // 수정
+        Optional<Company> optionalCompany = companyRepository.findById(company_index);
+        if (optionalCompany.isPresent()) {
+            if (!images.isEmpty()) {
+                // 기존 이미지 삭제
+                Company company = optionalCompany.get();
+                String imageUrl = company.getCoCompany_photo_url();
+                s3Service.deleteImageFromS3(imageUrl);
+
+                // 새 이미지 추가
+                String photoUrl = s3Service.uploadImageToS3(images);
+                companyDto.setCoCompany_photo_url(photoUrl);
+                optionalCompany.get().CompanyUpdate(companyDto.getCoCompany_name(), companyDto.getCoCompany_url(), companyDto.getCoCompany_photo_url());
+            }
+            companyRepository.save(optionalCompany.get());
         } else {
             throw new CompanyNotFindException(ExceptionList.NOT_EXISTENT_COMPANY);
         }
@@ -63,8 +82,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     @Override
     public void deleteCompany(Long company_index) { // 삭제
-        Optional<Company> Company = companyRepository.findById(company_index);
-        if (Company.isPresent()) {
+        Optional<Company> optionalCompany = companyRepository.findById(company_index);
+        if (optionalCompany.isPresent()) {
+            Company company = optionalCompany.get();
+            String imageUrl = company.getCoCompany_photo_url();
+            s3Service.deleteImageFromS3(imageUrl);
             companyRepository.deleteById(company_index);
         } else {
             throw new CompanyNotFindException(ExceptionList.NOT_EXISTENT_COMPANY);

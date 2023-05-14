@@ -14,7 +14,7 @@ class CompanyApplicationTests {
 
 	@Test
 	void contextLoads() {
-		Company company = new Company("test", "test");
+		Company company = new Company("test", "test", "test");
 		companyRepository.save(company);
 	}
 

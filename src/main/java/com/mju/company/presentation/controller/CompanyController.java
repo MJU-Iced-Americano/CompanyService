@@ -10,7 +10,9 @@ import com.mju.company.presentation.dto.CompanyDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,15 +33,15 @@ import java.util.List;
         return commonResult;
     }
 
-    @PostMapping("/company/register")
-    public CommonResult registerCompany(@RequestBody CompanyDto companyDto) {
-        companyService.registerCompany(companyDto);
+    @PostMapping(value = "/company/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CommonResult registerCompany(@RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto) {
+        companyService.registerCompany(companyDto, images);
         return responseService.getSuccessfulResult();
     }
 
-    @PostMapping("/company/modify/{company_index}")
-    public CommonResult modifyCompany(@PathVariable Long company_index, @RequestBody CompanyDto companyDto) {
-        companyService.modifyCompany(company_index, companyDto);
+    @PostMapping(value = "/company/modify/{company_index}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CommonResult modifyCompany(@PathVariable Long company_index, @RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto) {
+        companyService.modifyCompany(company_index, companyDto, images);
         return responseService.getSuccessfulResult();
     }
 
