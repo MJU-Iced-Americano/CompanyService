@@ -6,6 +6,7 @@ import com.mju.company.domain.model.Lecturer;
 import com.mju.company.domain.model.Notice;
 import com.mju.company.domain.model.other.Result.CommonResult;
 import com.mju.company.domain.service.ResponseService;
+import com.mju.company.domain.service.UserService;
 import com.mju.company.presentation.dto.CompanyDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
@@ -24,12 +25,15 @@ import java.util.List;
 
     private final CompanyService companyService;
     private final ResponseService responseService;
+    private final UserService userService;
 
     // 협력사
     @GetMapping("/company/get")
-    public CommonResult getCompany() {
+    public CommonResult getCompany(@CookieValue(value = "SOCOA-SSO-TOKEN", required = true)String ssoToken) {
         List<Company> CompanyList = companyService.getCompany();
-        CommonResult commonResult = responseService.getListResult(CompanyList);
+        String userId = userService.extractLoginUserId(ssoToken);
+//        CommonResult commonResult = responseService.getListResult(CompanyList);
+        CommonResult commonResult = responseService.getSingleResult(userId);
         return commonResult;
     }
 
