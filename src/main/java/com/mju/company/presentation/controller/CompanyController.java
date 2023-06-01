@@ -27,13 +27,17 @@ import java.util.List;
     private final ResponseService responseService;
     private final UserService userService;
 
+    @GetMapping("/company/test")
+    public CommonResult test(@CookieValue(value = "SOCOA-SSO-TOKEN", required = true)String ssoToken) {
+        String userId = userService.extractLoginUserId(ssoToken);
+        CommonResult commonResult = responseService.getSingleResult(userId);
+        return commonResult;
+    }
     // 협력사
     @GetMapping("/company/get")
-    public CommonResult getCompany(@CookieValue(value = "SOCOA-SSO-TOKEN", required = true)String ssoToken) {
+    public CommonResult getCompany() {
         List<Company> CompanyList = companyService.getCompany();
-        String userId = userService.extractLoginUserId(ssoToken);
-//        CommonResult commonResult = responseService.getListResult(CompanyList);
-        CommonResult commonResult = responseService.getSingleResult(userId);
+        CommonResult commonResult = responseService.getListResult(CompanyList);
         return commonResult;
     }
 
