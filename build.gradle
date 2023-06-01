@@ -39,7 +39,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation platform('software.amazon.awssdk:bom:2.17.167')
 	implementation 'software.amazon.awssdk:s3'
-	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
 }
 
 dependencyManagement {
