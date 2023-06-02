@@ -1,6 +1,7 @@
 package com.mju.company.presentation.controller;
 
 import com.mju.company.appliocation.CompanyService;
+import com.mju.company.appliocation.UserServiceImpl;
 import com.mju.company.domain.model.Company;
 import com.mju.company.domain.model.Lecturer;
 import com.mju.company.domain.model.Notice;
@@ -9,6 +10,7 @@ import com.mju.company.domain.service.ResponseService;
 import com.mju.company.presentation.dto.CompanyDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ import java.util.List;
     public class CompanyController {
 
     private final CompanyService companyService;
+    private final UserServiceImpl userService;
+
     private final ResponseService responseService;
 
     // 협력사
@@ -34,20 +38,26 @@ import java.util.List;
     }
 
     @PostMapping(value = "/company/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CommonResult registerCompany(@RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto) {
-        companyService.registerCompany(companyDto, images);
+    public CommonResult registerCompany(@RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto, HttpServletRequest request) {
+        String userId = userService.getUserId(request);
+        userService.checkUserType(userId, "MANAGER");
+        companyService.registerCompany(userId, companyDto, images);
         return responseService.getSuccessfulResult();
     }
 
     @PostMapping(value = "/company/modify/{company_index}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CommonResult modifyCompany(@PathVariable Long company_index, @RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto) {
-        companyService.modifyCompany(company_index, companyDto, images);
+    public CommonResult modifyCompany(@PathVariable Long company_index, @RequestPart(value = "image", required = false) MultipartFile images, CompanyDto companyDto, HttpServletRequest request) {
+        String userId = userService.getUserId(request);
+        userService.checkUserType(userId, "MANAGER");
+        companyService.modifyCompany(userId, company_index, companyDto, images);
         return responseService.getSuccessfulResult();
     }
 
     @DeleteMapping("/company/delete/{company_index}")
-    public CommonResult deleteCompany(@PathVariable Long company_index) {
-        companyService.deleteCompany(company_index);
+    public CommonResult deleteCompany(@PathVariable Long company_index, HttpServletRequest request) {
+        String userId = userService.getUserId(request);
+        userService.checkUserType(userId, "MANAGER");
+        companyService.deleteCompany(userId, company_index);
         return responseService.getSuccessfulResult();
     }
 

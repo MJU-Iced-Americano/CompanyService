@@ -43,7 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public void registerCompany(CompanyDto companyDto, MultipartFile images) { // 등록
+    public void registerCompany(String userId, CompanyDto companyDto, MultipartFile images) { // 등록
         if (!images.isEmpty()) {
             String imageUrl = s3Service.uploadImageToS3(images);
             companyDto.setCoCompany_photo_url(imageUrl);
@@ -59,7 +59,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public void modifyCompany(Long company_index, CompanyDto companyDto, MultipartFile images) { // 수정
+    public void modifyCompany(String userId, Long company_index, CompanyDto companyDto, MultipartFile images) { // 수정
         Optional<Company> optionalCompany = companyRepository.findById(company_index);
         if (optionalCompany.isPresent()) {
             if (!images.isEmpty()) {
@@ -81,7 +81,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public void deleteCompany(Long company_index) { // 삭제
+    public void deleteCompany(String userId, Long company_index) { // 삭제
         Optional<Company> optionalCompany = companyRepository.findById(company_index);
         if (optionalCompany.isPresent()) {
             Company company = optionalCompany.get();
@@ -103,7 +103,7 @@ public class CompanyServiceImpl implements CompanyService {
         return NoticeList;
     }
 
-    // 해당 강사의 공지사항 보기..? 왜 보는거지 =.=
+    // 해당 강사의 공지사항 보기
     @Override
     @Transactional
     public List<Notice> getNoticeList(Long lecturer_index) {

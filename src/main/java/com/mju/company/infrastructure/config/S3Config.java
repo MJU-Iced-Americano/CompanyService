@@ -12,9 +12,7 @@ public class S3Config {
 
     @Bean
     public S3Client s3Client() {
-        // 깃허브 올릴 때 지우고 올려라
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(System.getenv("S3_ACCESS_KEY"), System.getenv("S3_SECRET_KEY"));
-
         return S3Client.builder()
                 .region(Region.AP_NORTHEAST_2)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))

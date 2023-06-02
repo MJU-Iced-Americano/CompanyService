@@ -14,11 +14,11 @@ public interface CompanyService {
 
         public List<Company> getCompany();
 
-        public void registerCompany(CompanyDto companyDto, MultipartFile images);
+        public void registerCompany(String userId, CompanyDto companyDto, MultipartFile images);
 
-        public void modifyCompany(Long company_index, CompanyDto companyDto, MultipartFile images);
+        public void modifyCompany(String userId, Long company_index, CompanyDto companyDto, MultipartFile images);
 
-        public void deleteCompany(Long company_index);
+        public void deleteCompany(String userId, Long company_index);
 
         public List<Notice> getNotice();
         public List<Notice> getNoticeList(Long lecturer_index);
