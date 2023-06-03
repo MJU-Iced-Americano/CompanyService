@@ -4,6 +4,7 @@ import com.mju.company.domain.model.Company;
 import com.mju.company.domain.model.Lecturer;
 import com.mju.company.domain.model.Notice;
 import com.mju.company.presentation.dto.CompanyDto;
+import com.mju.company.presentation.dto.LectureReadDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,4 +32,8 @@ public interface CompanyService {
         public void registerLecturer(LecturerRegisterDto lecturerRegisterDto);
         public void modifyLecturer(Long lecturer_index, LecturerRegisterDto lecturerRegisterDto);
         public void deleteLecturer(Long lecturer_index);
+
+        LectureReadDto readLecturer(Long lecturer_index);
+
+        LectureReadDto readLecturerByUserId(String user_index);
 }

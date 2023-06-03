@@ -30,6 +30,8 @@ public class Lecturer {
     @Column(name = "lecturer_address")
     private String lecturer_address;
 
+    private String userId;
+
     @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notice> noticeList = new ArrayList<>();
 

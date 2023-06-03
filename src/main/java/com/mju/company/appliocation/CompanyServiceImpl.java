@@ -10,6 +10,7 @@ import com.mju.company.domain.repository.LecturerRepository;
 import com.mju.company.domain.repository.NoticeRepository;
 import com.mju.company.domain.service.S3Service;
 import com.mju.company.presentation.dto.CompanyDto;
+import com.mju.company.presentation.dto.LectureReadDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.mju.company.domain.model.other.Exception.ExceptionList.NOT_FIND_LECTURER;
 
 @Service
 @RequiredArgsConstructor
@@ -126,7 +129,7 @@ public class CompanyServiceImpl implements CompanyService {
             noticeRepository.save(newnotice);
             lecturer.addNoticeList(newnotice);
         } else {
-            throw new CompanyNotFindException(ExceptionList.NOT_FIND_LECTURER);
+            throw new CompanyNotFindException(NOT_FIND_LECTURER);
         }
     }
 
@@ -201,4 +204,23 @@ public class CompanyServiceImpl implements CompanyService {
             throw new CompanyNotFindException(ExceptionList.NOT_EXISTENT_LECTURER);
         }
     }
+
+    @Override
+    public LectureReadDto readLecturer(Long lecturer_index) {
+        Optional<Lecturer> lecturer = lecturerRepository.findById(lecturer_index);
+        if(lecturer.isEmpty()){
+            throw new CompanyNotFindException(NOT_FIND_LECTURER);
+        }
+        return LectureReadDto.of(lecturer.get());
+    }
+
+    @Override
+    public LectureReadDto readLecturerByUserId(String user_index) {
+        Optional<Lecturer> lecturer = lecturerRepository.findByUserId(user_index);
+        if(lecturer.isEmpty()){
+            throw new CompanyNotFindException(NOT_FIND_LECTURER);
+        }
+        return LectureReadDto.of(lecturer.get());
+    }
+
 }

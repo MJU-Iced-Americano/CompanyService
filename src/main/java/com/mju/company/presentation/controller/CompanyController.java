@@ -6,8 +6,10 @@ import com.mju.company.domain.model.Company;
 import com.mju.company.domain.model.Lecturer;
 import com.mju.company.domain.model.Notice;
 import com.mju.company.domain.model.other.Result.CommonResult;
+import com.mju.company.domain.model.other.Result.SingleResult;
 import com.mju.company.domain.service.ResponseService;
 import com.mju.company.presentation.dto.CompanyDto;
+import com.mju.company.presentation.dto.LectureReadDto;
 import com.mju.company.presentation.dto.LecturerRegisterDto;
 import com.mju.company.presentation.dto.NoticeRegisterDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,11 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-    @RestController
-    @RequiredArgsConstructor
-    @CrossOrigin(origins = "*")
-    @RequestMapping("/company-service")
-    public class CompanyController {
+@RestController
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("/company-service")
+public class CompanyController {
 
     private final CompanyService companyService;
     private final UserServiceImpl userService;
@@ -81,11 +83,13 @@ import java.util.List;
         companyService.registerNotice(lecturer_index, noticeRegisterDto);
         return responseService.getSuccessfulResult();
     }
+
     @PostMapping("/notice/modify/{notice_index}")
     public CommonResult modifyCompany(@PathVariable Long notice_index, @RequestBody NoticeRegisterDto noticeRegisterDto) {
         companyService.modifyNotice(notice_index, noticeRegisterDto);
         return responseService.getSuccessfulResult();
     }
+
     @DeleteMapping("/notice/delete/{notice_index}")
     public CommonResult deleteNotice(@PathVariable Long notice_index) {
         companyService.deleteNotice(notice_index);
@@ -99,20 +103,47 @@ import java.util.List;
         CommonResult commonResult = responseService.getListResult(lecturerList);
         return commonResult;
     }
+
+    /**
+     * 강사진 등록 -> cookie 추가
+     * */
     @PostMapping("/lecturer/register")
-    public CommonResult registerLecturer(@RequestBody LecturerRegisterDto lecturerRegisterDto){
+    public CommonResult registerLecturer(@RequestBody LecturerRegisterDto lecturerRegisterDto,
+                                         HttpServletRequest request) {
+        String userId = userService.getUserId(request);
+        userService.checkUserType(userId,"TEACHER");
         companyService.registerLecturer(lecturerRegisterDto);
         return responseService.getSuccessfulResult();
     }
+
     @PostMapping("/lecturer/modify/{lecturer_index}")
-    public CommonResult modifyLecturer(@PathVariable Long lecturer_index, @RequestBody LecturerRegisterDto lecturerRegisterDto){
+    public CommonResult modifyLecturer(@PathVariable Long lecturer_index, @RequestBody LecturerRegisterDto lecturerRegisterDto) {
         companyService.modifyLecturer(lecturer_index, lecturerRegisterDto);
         return responseService.getSuccessfulResult();
     }
+
     @DeleteMapping("/lecturer/delete/{lecturer_index}")
-    public CommonResult deleteLecturer(@PathVariable Long lecturer_index){
+    public CommonResult deleteLecturer(@PathVariable Long lecturer_index) {
         companyService.deleteLecturer(lecturer_index);
         return responseService.getSuccessfulResult();
+    }
+
+    /**
+     * 강사진 정보 보기
+     * */
+    @GetMapping("/lecturer/{lecturer_index}")
+    public LectureReadDto readLecturer(@PathVariable Long lecturer_index) {
+        LectureReadDto lecturer = companyService.readLecturer(lecturer_index);
+        return lecturer;
+    }
+
+    /**
+     * 유저 id로 강사진 정보 불러오기
+     * */
+    @GetMapping("/lecture/user")
+    public LectureReadDto readLecturerByUserId(@RequestParam("id") String user_index) {
+        LectureReadDto lecturer = companyService.readLecturerByUserId(user_index);
+        return lecturer;
     }
 
 }
